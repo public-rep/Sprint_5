@@ -1,3 +1,4 @@
+
 import unittest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,20 +23,15 @@ class TestLogInUser(unittest.TestCase):
         email, password = register_user(driver, wait)
 
         wait.until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()
-
         wait.until(EC.element_to_be_clickable(LOGIN_BUTTON)).click()
-
         wait.until(EC.visibility_of_element_located(EMAIL_FIELD)).send_keys(email)
-
         wait.until(EC.visibility_of_element_located(PASSWORD_FIELD)).send_keys(password)
-
         wait.until(EC.element_to_be_clickable(ENTER_BUTTON)).click()
         
         user_name = wait.until(EC.visibility_of_element_located(USER_NAME))
-        self.assertEqual( user_name.text,"User.")
-
         image_icon_user = wait.until(EC.visibility_of_element_located(IMAGE_USER))
+
+        self.assertEqual(user_name.text, "User.")
         self.assertTrue(image_icon_user.is_displayed())
 
-        user_logout = wait.until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()
-
+        wait.until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()

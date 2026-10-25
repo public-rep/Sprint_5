@@ -1,3 +1,4 @@
+
 import unittest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -22,9 +23,9 @@ class TestLogOutUser(unittest.TestCase):
         email, password = register_user(driver, wait)
 
         wait.until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()
-        self.assertTrue(wait.until(EC.invisibility_of_element_located(USER_NAME)))
 
+        user_name_invisible = wait.until(EC.invisibility_of_element_located(USER_NAME))
         post_ad_button = wait.until(EC.visibility_of_element_located(POST_AD_BUTTON))
+
+        self.assertTrue(user_name_invisible)
         self.assertTrue(post_ad_button.is_displayed())
-
-

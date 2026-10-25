@@ -1,11 +1,12 @@
 import random
 import string
 from locators import *
+from variables import *
 from selenium.webdriver.support import expected_conditions as EC
 
 
 PASSWORD = "Password123!"
-BASE_URL = "https://qa-desk.education-services.ru/"
+
 
 
 def generate_email(domain="domen.ru"):

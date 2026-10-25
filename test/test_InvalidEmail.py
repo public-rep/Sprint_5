@@ -20,20 +20,14 @@ class TestInvalidEmail(unittest.TestCase):
     def test_invalid_email_shows_validation_error(self):
         driver = self.driver
         wait = self.wait
-        email, password = register_user(driver, wait,email="uiui")
+        email, password = register_user(driver, wait, email="uiui")
 
-    
         error_message = wait.until(EC.visibility_of_element_located(EMAIL_ERROR_MESSAGE))
-        self.assertEqual(error_message.text.strip(), "Ошибка")
-
         element_collor_email_form = wait.until(EC.visibility_of_element_located(COLLOR_EMAIL_FORM))
-        border_color = element_collor_email_form.value_of_css_property("border-top-color")
-        self.assertEqual( border_color,"rgba(255, 105, 114, 1)")
-
         element_collor_password_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_FORM))
-        border_color = element_collor_password_form.value_of_css_property( "border-top-color")
-        self.assertEqual(border_color,"rgba(255, 105, 114, 1)")
-                
-        element_collor_password_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_REPEAT_FORM))
-        border_color = element_collor_password_form.value_of_css_property( "border-top-color")
-        self.assertEqual(border_color,"rgba(255, 105, 114, 1)")
+        element_collor_password_repeat_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_REPEAT_FORM))
+
+        self.assertEqual(error_message.text.strip(), "Ошибка")
+        self.assertEqual(element_collor_email_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
+        self.assertEqual(element_collor_password_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
+        self.assertEqual(element_collor_password_repeat_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
