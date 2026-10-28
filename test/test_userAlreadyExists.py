@@ -1,6 +1,6 @@
 
 import test_registration
-import unittest
+import pytest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -8,19 +8,14 @@ from locators import *
 from register_user import *
 
 
-class TestUserAlreadyExists(unittest.TestCase):
 
-    def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.wait = WebDriverWait(self.driver, 10)
-
-    def tearDown(self):
-        if hasattr(self, "driver"):
-            self.driver.quit()
-
-    def test_user_already_exists(self):
-        driver = self.driver
-        wait = self.wait
+@pytest.fixture
+def driver():
+        browser = webdriver.Chrome()
+        yield browser
+        browser.quit()   
+def test_user_already_exists(driver):
+        wait = WebDriverWait(driver, 10)
         email, password = register_user(driver, wait)
 
         wait.until(EC.element_to_be_clickable(LOGOUT_BUTTON)).click()
@@ -36,7 +31,10 @@ class TestUserAlreadyExists(unittest.TestCase):
         element_collor_password_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_FORM))
         element_collor_password_repeat_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_REPEAT_FORM))
 
-        self.assertEqual(error_message.text.strip(), "Ошибка")
-        self.assertEqual(element_collor_email_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
-        self.assertEqual(element_collor_password_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
-        self.assertEqual(element_collor_password_repeat_form.value_of_css_property("border-top-color"), "rgba(255, 105, 114, 1)")
+        assert error_message.text.strip() == "Ошибка"
+
+        assert element_collor_email_form.value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
+
+        assert element_collor_password_form.value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
+
+        assert element_collor_password_repeat_form.value_of_css_property( "border-top-color") == "rgba(255, 105, 114, 1)"

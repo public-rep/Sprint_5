@@ -1,5 +1,5 @@
 
-import unittest
+import pytest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -7,19 +7,14 @@ from locators import *
 from variables import *
 
 
-class UnauthorizedUser(unittest.TestCase):
+@pytest.fixture
+def driver():
+        browser = webdriver.Chrome()
+        yield browser
+        browser.quit()   
+def test_unauthorized_user(driver):
+        wait = WebDriverWait(driver, 10)
 
-    def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.wait = WebDriverWait(self.driver, 10)
-
-    def tearDown(self):
-        if hasattr(self, "driver"):
-            self.driver.quit()
-
-    def test_unauthorized_user(self):
-        driver = self.driver
-        wait = self.wait
         driver.get(BASE_URL)
 
         wait.until(EC.visibility_of_element_located(LOGIN_BUTTON))
@@ -27,4 +22,4 @@ class UnauthorizedUser(unittest.TestCase):
 
         error_unauthorized_user = wait.until(EC.visibility_of_element_located(ERRO_UNAUTHORIZED_USER))
 
-        self.assertEqual(error_unauthorized_user.text, "Чтобы разместить объявление, авторизуйтесь")
+        assert error_unauthorized_user.text.strip() == ("Чтобы разместить объявление, авторизуйтесь")
