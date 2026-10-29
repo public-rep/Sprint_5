@@ -1,7 +1,4 @@
-
-import test_registration
 import pytest
-from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from locators import *
@@ -9,11 +6,7 @@ from register_user import *
 
 
 
-@pytest.fixture
-def driver():
-        browser = webdriver.Chrome()
-        yield browser
-        browser.quit()   
+
 def test_user_already_exists(driver):
         wait = WebDriverWait(driver, 10)
         email, password = register_user(driver, wait)
@@ -26,15 +19,11 @@ def test_user_already_exists(driver):
         wait.until(EC.visibility_of_element_located(CONFIRM_PASSWORD_FIELD)).send_keys(password)
         wait.until(EC.element_to_be_clickable(CREATE_ACCOUNT_BUTTON)).click()
 
-        error_message = wait.until(EC.visibility_of_element_located(EMAIL_ERROR_MESSAGE))
-        element_collor_email_form = wait.until(EC.visibility_of_element_located(COLLOR_EMAIL_FORM))
-        element_collor_password_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_FORM))
-        element_collor_password_repeat_form = wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_REPEAT_FORM))
+   
+        assert wait.until(EC.visibility_of_element_located(EMAIL_ERROR_MESSAGE)).text.strip() == "Ошибка"
 
-        assert error_message.text.strip() == "Ошибка"
+        assert wait.until(EC.visibility_of_element_located(COLLOR_EMAIL_FORM)).value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
 
-        assert element_collor_email_form.value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
+        assert  wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_FORM)).value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
 
-        assert element_collor_password_form.value_of_css_property("border-top-color") == "rgba(255, 105, 114, 1)"
-
-        assert element_collor_password_repeat_form.value_of_css_property( "border-top-color") == "rgba(255, 105, 114, 1)"
+        assert wait.until(EC.visibility_of_element_located(COLLOR_PASSWORD_REPEAT_FORM)).value_of_css_property( "border-top-color") == "rgba(255, 105, 114, 1)"

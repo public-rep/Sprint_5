@@ -7,11 +7,6 @@ from locators import *
 from register_user import *
 
 
-@pytest.fixture
-def driver():
-        browser = webdriver.Chrome()
-        yield browser
-        browser.quit()    
 def test_log_out_user(driver):
         wait = WebDriverWait(driver, 10)
         email, password = register_user(driver, wait)

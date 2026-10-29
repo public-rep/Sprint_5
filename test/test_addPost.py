@@ -8,12 +8,6 @@ from locators import *
 from register_user import register_user
 
 
-@pytest.fixture
-def driver():
-    browser = webdriver.Chrome()
-    yield browser
-    browser.quit()
-
 
 def test_add_post(driver):
     wait = WebDriverWait(driver, 10)
@@ -62,9 +56,7 @@ def test_add_post(driver):
     card = wait.until( EC.visibility_of_element_located(ELEMENT_LOCATOR) )
 
     title = card.find_element(*CHECK_PRODUCK_NAME)
+    actual_price = card.find_element(*CHECK_PRICE).text.replace(" ", "").replace("\u00a0", "")
+
     assert title.text.strip() == product_name
-
-    price = card.find_element(*CHECK_PRICE)
-    actual_price = price.text.replace(" ", "").replace("\u00a0", "")
-
     assert cost in actual_price
